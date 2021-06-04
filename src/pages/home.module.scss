@@ -1,0 +1,71 @@
+.homeHeader {
+  padding: 5.06rem 0 3.8rem 0.5rem;
+}
+
+.homePost {
+  cursor: pointer;
+
+  & + & {
+    margin-top: 3.125rem;
+    display: block;
+  }
+
+  strong {
+    color: var(--white-50);
+    font-weight: 700;
+    font-size: 1.75rem;
+    line-height: 2.125rem;
+    letter-spacing: 0.031rem;
+    text-align: justify;
+
+    transition: 0.2s color;
+
+    &:hover {
+      color: var(--pink-500);
+    }
+  }
+
+  p {
+    margin-top: 0.5rem;
+    color: var(--gray-250);
+    font-size: 1.125rem;
+    line-height: 1.361rem;
+  }
+
+  div {
+    margin-top: 1.563rem;
+    display: flex;
+    align-items: center;
+
+    time,
+    span {
+      font-size: 0.875rem;
+      line-height: 1.063rem;
+      color: var(--gray-300);
+      margin-left: 0.656rem;
+    }
+
+    time {
+      margin-right: 1.688rem;
+    }
+  }
+}
+
+.homeLoadMore {
+  cursor: pointer;
+  display: block;
+  margin-top: 4.125rem;
+  font-weight: 600;
+  font-size: 1.125rem;
+  line-height: 1.361rem;
+  color: var(--pink-500);
+  background: transparent;
+  border: none;
+
+  transition: 0.2s;
+
+  &:hover {
+      filter: brightness(1.1);
+    text-decoration: underline;
+  }
+}
