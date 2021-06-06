@@ -1,0 +1,21 @@
+.exitPreviewButton {
+  background: var(--white-50);
+  border-radius: 0.25rem;
+  margin: 5rem auto !important;
+
+  transition: filter 200ms;
+
+  &:hover {
+    filter: brightness(0.8);
+  }
+
+  a {
+    display: block;
+    padding: 1.125rem 0;
+    color: var(--black-900);
+    font-size: 1.125rem;
+    font-weight: 600;
+    line-height: 1.361rem;
+    text-align: center;
+  }
+}

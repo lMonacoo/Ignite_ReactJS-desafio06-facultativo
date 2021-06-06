@@ -13,6 +13,7 @@ import { getPrismicClient } from '../services/prismic';
 
 import commonStyles from '../styles/common.module.scss';
 import styles from './home.module.scss';
+import ExitPreviewButton from '../components/exitPreviewButton';
 
 interface Post {
   uid?: string;
@@ -31,9 +32,13 @@ interface PostPagination {
 
 interface HomeProps {
   postsPagination: PostPagination;
+  preview: boolean;
 }
 
-export default function Home({ postsPagination }: HomeProps): JSX.Element {
+export default function Home({
+  postsPagination,
+  preview,
+}: HomeProps): JSX.Element {
   const [posts, setPosts] = useState<Post[]>(postsPagination.results);
   const [nextPage, setNextPage] = useState<string>(postsPagination.next_page);
 
@@ -60,6 +65,13 @@ export default function Home({ postsPagination }: HomeProps): JSX.Element {
     <>
       <Head>
         <title>SpaceTraveling | Home</title>
+        {preview && (
+          <script
+            async
+            defer
+            src="https://static.cdn.prismic.io/prismic.js?new=true&repo=03-ignite"
+          />
+        )}
       </Head>
 
       <main className={commonStyles.container}>
@@ -75,9 +87,15 @@ export default function Home({ postsPagination }: HomeProps): JSX.Element {
               <div>
                 <FiCalendar size={20} color="#BBBBBB" />
                 <time>
-                  {format(parseISO(post.first_publication_date), 'dd MMM Y', {
-                    locale: ptBR,
-                  })}
+                  {post.first_publication_date
+                    ? format(
+                        parseISO(post.first_publication_date),
+                        'dd MMM Y',
+                        {
+                          locale: ptBR,
+                        }
+                      )
+                    : 'pendente'}
                 </time>
 
                 <FiUser size={20} color="#BBBBBB" />
@@ -96,16 +114,23 @@ export default function Home({ postsPagination }: HomeProps): JSX.Element {
             Carregar mais posts
           </button>
         )}
+
+        {preview && <ExitPreviewButton />}
       </main>
     </>
   );
 }
 
-export const getStaticProps: GetStaticProps = async () => {
+export const getStaticProps: GetStaticProps<HomeProps> = async ({
+  preview = false,
+  previewData,
+}) => {
   const prismic = getPrismicClient();
+
   const postsResponse = await prismic.query(
     [Prismic.Predicates.at('document.type', 'posts')],
     {
+      ref: previewData?.ref ?? null,
       fetch: ['posts.title', 'posts.subtitle', 'posts.author'],
       pageSize: 1,
     }
@@ -129,6 +154,7 @@ export const getStaticProps: GetStaticProps = async () => {
         next_page: postsResponse.next_page,
         results: posts,
       },
+      preview,
     },
     revalidate: 60 * 60 * 8, // 8 horas,
   };
